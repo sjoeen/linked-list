@@ -1,0 +1,7 @@
+The simulation with default parameters should run in a couple of minutes when
+run without implementing anything. It uses several gigabytes of memory. With a
+working gc_free function it should not take more than a handful of megabytes.
+
+You may find that sometimes the bacterial population collapses early on in the
+experiment and hence no memory is used. If this happens a lot you can adjust
+the antibiotic strength to something smaller (but greater than 0).
