@@ -31,24 +31,14 @@ struct list {
 };
 
 
+struct list_iterator {
+    /*
+    works just like a iterator in python.
+    */
 
-
-int main() {
-    list_t *a = list_create();  // Create a new list
-    printf("List size: %d\n", list_size(a));
-
-    int value_1 = 2;
-    int value_2 = 5;
-    list_addfirst(a,&value_1);
-    list_addlast(a,&value_2);
-    list_addfirst(a,&value_1);
-    list_addfirst(a,&value_2);
-    printf("\nlist size: %d\n",list_size(a));
-    list_remove(a,&value_2);
-    printf("\nlist size: %d\n",list_size(a));
-    return 0;
+    struct node* current;
+    struct node* head;
 };
-
 
 
 
@@ -151,6 +141,13 @@ void list_addlast(list_t *list, void *item) {
     new_node -> next = NULL;
         //since its the last element of the linked list
 
+    if (list->head == NULL) {
+        //checks if the list is empty
+        list-> head = new_node;
+        list -> size += 1;
+        return;
+    }
+
     while (value != NULL) {
         //loops through the whole list
         
@@ -215,4 +212,68 @@ int list_size(list_t *list) {
     */
 
     return list -> size;
+};
+
+list_iterator_t *list_createiterator(list_t *list) {
+    /*
+    function that construct an iterator of a list, it
+    also keep track of index
+
+    parameter(s): list
+    return: list iterator
+    */
+
+    list_iterator_t *iterator = malloc(sizeof(struct list_iterator));
+        //frees up enought memory
+
+    iterator -> current = list -> head;
+    //iterator -> index = 0;
+    iterator -> head = list -> head;
+        //define variables
+
+
+    return iterator;
+};
+
+void list_destroyiterator(list_iterator_t *iter) {
+    /*
+    This function frees up the storage of a given iteraton
+    without affecting the rest of the list.
+    */
+
+    if (iter != NULL) {
+        //makes sure current iteration is not at the end of the list
+        free(iter);
+    }
+
+};
+void *list_next(list_iterator_t *iter) {
+    /*
+    This function add one to the current iteration
+    and returns the old iterator.
+    */
+    if (iter -> current == NULL) {
+        return NULL;
+        //if we are at the end of the list. 
+    }
+
+    //iter-> index += 1;
+    void *data = iter -> current -> data;
+        //take out the data from the node
+
+    iter -> current = iter -> current -> next;
+        //Define the new data
+
+    return data;
+
+};
+
+void list_resetiterator(list_iterator_t *iter) {
+    /*
+    This function is quite simple since iter stores the head. 
+    */
+
+    iter -> current = iter -> head;
+
+
 };

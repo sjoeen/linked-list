@@ -38,9 +38,86 @@ void gc_register(void *address) {
 // Unregisters use of the memory pointed to by ptr. If the reference counter is
 // zero at this point the memory can be safely freed, otherwise it must be kept
 // intact. 
+
+typedef struct gc_object {
+    /*
+    Chatgpt implemented this structure and the comments:
+    https://chatgpt.com/share/66f67229-5dfc-800d-839a-613eefefb883
+    */
+    int ref_count; // The reference count
+    void *data;    // The actual data stored in the object
+} gc_object;
+
+/*
 void gc_free(void *address) {
     
-    // someone forgot to implement this
+    Chatgpt implemented this function and the comments:
+    https://chatgpt.com/share/66f67229-5dfc-800d-839a-613eefefb883
 
-    return;
+    
+    // Cast the address to a gc_object pointer
+    gc_object *obj = (gc_object *)address;
+
+    // Decrease the reference count
+    obj->ref_count--;
+
+    // If the reference count reaches zero, free the memory
+    if (obj->ref_count == 0) {
+        // Free the data held in the object
+        free(obj->data);
+
+        // Free the gc_object itself
+        free(obj);
+    }
 }
+*/
+
+/*
+void gc_free(void *address) {
+    
+    Safely free the memory only if no other object references it.
+    
+    // Cast the address to a gc_object pointer
+    gc_object *obj = (gc_object *)address;
+
+    // Decrease the reference count
+    if (obj->ref_count > 0) {
+        obj->ref_count--;
+    }
+
+    // If the reference count reaches zero, free the memory
+    if (obj->ref_count == 0) {
+        // Free the data held in the object
+        if (obj->data != NULL) {
+            free(obj->data);
+            obj->data = NULL; // Avoid dangling pointer
+        }
+
+        // Free the gc_object itself
+        free(obj);
+    }
+}
+*/
+
+void gc_free(void *address) {
+    if (address == NULL) return; // Safety check
+    
+    gc_object *obj = (gc_object *)address;
+
+    // Decrease the reference count
+    obj->ref_count--;
+
+    // If the reference count reaches zero, free the memory
+    if (obj->ref_count == 0) {
+        // Free the data held in the object
+        if (obj->data != NULL) {
+            free(obj->data);
+            obj->data = NULL; // Prevent dangling pointers
+        }
+
+        // Free the gc_object itself
+        free(obj);
+        obj = NULL; // Prevent dangling pointers
+    }
+}
+
