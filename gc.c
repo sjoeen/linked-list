@@ -48,58 +48,12 @@ typedef struct gc_object {
     void *data;    // The actual data stored in the object
 } gc_object;
 
-/*
-void gc_free(void *address) {
-    
-    Chatgpt implemented this function and the comments:
-    https://chatgpt.com/share/66f67229-5dfc-800d-839a-613eefefb883
-
-    
-    // Cast the address to a gc_object pointer
-    gc_object *obj = (gc_object *)address;
-
-    // Decrease the reference count
-    obj->ref_count--;
-
-    // If the reference count reaches zero, free the memory
-    if (obj->ref_count == 0) {
-        // Free the data held in the object
-        free(obj->data);
-
-        // Free the gc_object itself
-        free(obj);
-    }
-}
-*/
-
-/*
-void gc_free(void *address) {
-    
-    Safely free the memory only if no other object references it.
-    
-    // Cast the address to a gc_object pointer
-    gc_object *obj = (gc_object *)address;
-
-    // Decrease the reference count
-    if (obj->ref_count > 0) {
-        obj->ref_count--;
-    }
-
-    // If the reference count reaches zero, free the memory
-    if (obj->ref_count == 0) {
-        // Free the data held in the object
-        if (obj->data != NULL) {
-            free(obj->data);
-            obj->data = NULL; // Avoid dangling pointer
-        }
-
-        // Free the gc_object itself
-        free(obj);
-    }
-}
-*/
 
 void gc_free(void *address) {
+    /*
+    chatgpt made this function and all the comments:
+    https://chatgpt.com/share/66f68252-d11c-800d-b6af-b6f4f1507144
+    */
     if (address == NULL) return; // Safety check
     
     gc_object *obj = (gc_object *)address;

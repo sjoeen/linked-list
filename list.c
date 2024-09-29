@@ -7,16 +7,14 @@
 
 struct node {
     /*
-    this struct represent one index of the linked list,
-    it contains the data one wishes to fill and the pointer 
-    to the next index. 
+    The node struct represents one index of the linked list,
+    it contains one given datapoint and a pointer to the next 
+    variable.
     */
     void* data;
     struct node* next;
 
 };
-
-
 
 
 struct list {
@@ -25,7 +23,6 @@ struct list {
     index into the node structure, so we have one datapoint and one 
     pointer. It also gives easy access to the size.
     */
-
     struct node* head;
     int size;
 };
@@ -33,9 +30,9 @@ struct list {
 
 struct list_iterator {
     /*
-    works just like a iterator in python.
+    The list iterator keeps of one given node, and also the 
+    first one.
     */
-
     struct node* current;
     struct node* head;
 };
@@ -217,7 +214,7 @@ int list_size(list_t *list) {
 list_iterator_t *list_createiterator(list_t *list) {
     /*
     function that construct an iterator of a list, it
-    also keep track of index
+    also keep track of the head
 
     parameter(s): list
     return: list iterator
@@ -227,7 +224,7 @@ list_iterator_t *list_createiterator(list_t *list) {
         //frees up enought memory
 
     iterator -> current = list -> head;
-    //iterator -> index = 0;
+    //iterator -> head node
     iterator -> head = list -> head;
         //define variables
 
@@ -257,7 +254,6 @@ void *list_next(list_iterator_t *iter) {
         //if we are at the end of the list. 
     }
 
-    //iter-> index += 1;
     void *data = iter -> current -> data;
         //take out the data from the node
 
